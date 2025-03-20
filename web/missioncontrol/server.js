@@ -39,6 +39,7 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (message) => {
     if (message instanceof Buffer) {
+      console.log(`Received binary message (${message.byteLength} bytes)`); // added debug
       wss.clients.forEach((client) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
           client.send(message);
@@ -46,28 +47,18 @@ wss.on("connection", (ws) => {
       });
     } else {
       const msgString = message.toString();
+      console.log(`Received text message: ${msgString}`); // added debug
       if (msgString.startsWith("CONTROL|")) {
         const commands = msgString.replace("CONTROL|", "").split("+");
-
-        let force = 0;
-        let turn = 0;
+        let force = 0, turn = 0;
 
         commands.forEach((command) => {
           switch (command) {
-            case "FORWARD":
-              force = 1;
-              break;
-            case "BACKWARD":
-              force = -1;
-              break;
-            case "LEFT":
-              turn = -1;
-              break;
-            case "RIGHT":
-              turn = 1;
-              break;
-            default:
-              console.log("Unknown command:", command);
+            case "FORWARD": force = 1; break;
+            case "BACKWARD": force = -1; break;
+            case "LEFT": turn = -1; break;
+            case "RIGHT": turn = 1; break;
+            default: console.log("Unknown command:", command);
           }
         });
 
