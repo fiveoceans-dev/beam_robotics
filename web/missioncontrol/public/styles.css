@@ -150,6 +150,22 @@ img {
     margin: 5px;
 }
 
+.dot-idle, .dot-active {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+.dot-idle {
+    background-color: red;
+}
+
+.dot-active {
+    background-color: green;
+}
+
 /* Footer */
 .footer {
     width: 100%;

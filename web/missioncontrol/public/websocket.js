@@ -1,17 +1,32 @@
 // websocket.js
 
-let socket;
-const WS_URL = "ws://localhost:3000";
-let activeKeys = new Set(); // Track pressed keys
-let sendInterval = null; // Interval for sending commands
-let imageCache = {}; // Cache last received images to avoid excessive reloading
+let socket = null;
+let activeKeys = new Set();
+let sendInterval = null;
+let imageCache = {};
+let isConnected = false;
 
-function connectWebSocket() {
-    socket = new WebSocket(WS_URL);
+// Start or stop WebSocket connection
+document.getElementById("toggle-btn").addEventListener("click", () => {
+    const url = document.getElementById("websocket").value.trim() || "ws://localhost:3000";
+
+    if (!isConnected) {
+        connectWebSocket(url);
+    } else {
+        closeWebSocket();
+    }
+});
+
+// Connect to WebSocket server
+function connectWebSocket(url) {
+    socket = new WebSocket(url);
     socket.binaryType = "arraybuffer";
 
     socket.onopen = () => {
-        console.log("Connected to WebSocket server");
+        isConnected = true;
+        updateStatusDot(true);
+        document.getElementById("toggle-btn").textContent = "Stop";
+        console.log("Connected to WebSocket server:", url);
     };
 
     socket.onmessage = (event) => {
@@ -23,72 +38,78 @@ function connectWebSocket() {
     };
 
     socket.onclose = () => {
-        console.warn("WebSocket disconnected. Attempting to reconnect...");
-        setTimeout(connectWebSocket, 2000);
+        isConnected = false;
+        updateStatusDot(false);
+        document.getElementById("toggle-btn").textContent = "Start";
+        console.warn("WebSocket disconnected.");
     };
 
     socket.onerror = (error) => {
         console.error("WebSocket error:", error);
-        setTimeout(connectWebSocket, 2000);
     };
 }
 
-// Handle control messages (debugging)
-function handleControlMessage(message) {
-    console.log("Control message received:", message);
+// Close WebSocket connection
+function closeWebSocket() {
+    if (socket) {
+        socket.close();
+        socket = null;
+        isConnected = false;
+        updateStatusDot(false);
+        document.getElementById("toggle-btn").textContent = "Start";
+        console.log("WebSocket closed manually.");
+    }
+}
+
+// Update dot indicator based on WebSocket status
+function updateStatusDot(active) {
+    const statusDot = document.getElementById("ws-status");
+    statusDot.className = active ? "dot-active" : "dot-idle";
 }
 
 // Handle incoming video frames
 function handleImageFrame(data) {
-    let dataArray = new Uint8Array(data);
-    let separatorIndex = dataArray.indexOf(124); // ASCII '|' separator
+    const dataArray = new Uint8Array(data);
+    const separatorIndex = dataArray.indexOf(124);
     if (separatorIndex === -1) {
-        console.warn("Invalid image data received (no separator)");
+        console.warn("Invalid image data received (no separator).");
         return;
     }
 
-    let cameraName = new TextDecoder().decode(dataArray.slice(0, separatorIndex));
-    let imageData = dataArray.slice(separatorIndex + 1);
+    const cameraName = new TextDecoder().decode(dataArray.slice(0, separatorIndex));
+    const imageData = dataArray.slice(separatorIndex + 1);
+    const blob = new Blob([imageData], { type: "image/jpeg" });
+    const url = URL.createObjectURL(blob);
 
-    let blob = new Blob([imageData], { type: "image/jpeg" });
-    let url = URL.createObjectURL(blob);
-
-    // Prevent unnecessary reloads if the same image is received
     if (imageCache[cameraName] === url) return;
     imageCache[cameraName] = url;
 
-
-    // Find existing placeholders inside the .stream-area div
-    let imgContainers = document.querySelectorAll(".general-area img");
-
-    for (let img of imgContainers) {
+    const imgContainers = document.querySelectorAll(".general-area img");
+    imgContainers.forEach((img) => {
         if (img.getAttribute("data-camera") === cameraName) {
             img.src = url;
-            return;
         }
-    }
-
-    console.warn(`No placeholder found for ${cameraName}, skipping frame.`);
+    });
 }
 
+// Handle incoming text control messages
+function handleControlMessage(message) {
+    console.log("Control message received:", message);
+}
 
-// Establish WebSocket Connection
-connectWebSocket();
-
-// Continuously send active key commands
+// Send commands at intervals when keys are pressed
 function startSendingCommands() {
     if (!sendInterval) {
         sendInterval = setInterval(() => {
-            if (activeKeys.size > 0 && socket.readyState === WebSocket.OPEN) {
-                let command = `CONTROL|${Array.from(activeKeys).join("+")}`;
+            if (activeKeys.size > 0 && socket && socket.readyState === WebSocket.OPEN) {
+                const command = `CONTROL|${Array.from(activeKeys).join("+")}`;
                 socket.send(command);
-                // console.log("Sent:", command);
             }
-        }, 100); // Send every 100ms
+        }, 100);
     }
 }
 
-// ⏹Stop sending when no keys are pressed
+// Stop sending when no keys pressed
 function stopSendingCommands() {
     if (activeKeys.size === 0 && sendInterval) {
         clearInterval(sendInterval);
@@ -96,7 +117,7 @@ function stopSendingCommands() {
     }
 }
 
-// Handle Key Press
+// Handle keyboard events
 document.addEventListener("keydown", (event) => {
     const keyMap = { "w": "FORWARD", "s": "BACKWARD", "a": "LEFT", "d": "RIGHT" };
     if (keyMap[event.key]) {
@@ -105,7 +126,6 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-// Handle Key Release
 document.addEventListener("keyup", (event) => {
     const keyMap = { "w": "FORWARD", "s": "BACKWARD", "a": "LEFT", "d": "RIGHT" };
     if (keyMap[event.key]) {
@@ -113,3 +133,7 @@ document.addEventListener("keyup", (event) => {
         stopSendingCommands();
     }
 });
+
+// Initialize UI
+updateStatusDot(false);
+document.getElementById("toggle-btn").textContent = "Start";

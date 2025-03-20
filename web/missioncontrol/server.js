@@ -14,11 +14,11 @@ const wss = new WebSocket.Server({ server });
 app.use(express.static(path.join(__dirname, "public")));
 
 // API routes for keys
-app.get("/api/config", (req, res) => {
+app.get("/api/googlemaps", (req, res) => {
   res.json({ googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY });
 });
 
-app.get("/api/weather-layer", (req, res) => {
+app.get("/api/weather", (req, res) => {
   const { type } = req.query;
   if (!type) {
     return res.status(400).json({ error: "Missing weather layer type" });

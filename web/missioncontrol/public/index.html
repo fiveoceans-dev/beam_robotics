@@ -23,11 +23,15 @@
             <a href="https://github.com/fiveoceans-dev/beam_robotics">GitHub</a>
         </div>
     </div>
-    <form>
-        <p>Enter Local WebSocket Address</p>
-        <input type="text" id="websocket" name="websocket" placeholder="ws://localhost:3000">
-        <input type="submit" value="Submit">
-    </form>
+
+    <!-- Websocket form-->
+    <form id="ws-form">
+        <label for="websocket">Enter Local WebSocket Address:</label>
+        <span id="ws-status" class="dot-idle"></span>
+        <input type="text" id="websocket" name="websocket" placeholder="ws://localhost:3000" value="ws://localhost:3000">
+        <button type="button" id="toggle-btn">Start</button>
+    </form>    
+
     <!-- Content -->
     <div class="content-horizontal" id="home">
         <!-- Left Column -->

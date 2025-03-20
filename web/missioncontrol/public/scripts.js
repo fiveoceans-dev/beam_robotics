@@ -1,3 +1,5 @@
+// script.js
+
 let map;
 let currentWeatherLayer = null;
 
@@ -23,7 +25,7 @@ async function toggleWeatherLayer(type) {
             currentWeatherLayer = null;
         }
 
-        const response = await fetch(`/api/weather-layer?type=${type}`);
+        const response = await fetch(`/api/weather?type=${type}`);
         const data = await response.json();
 
         if (data.error) {
@@ -53,7 +55,7 @@ async function toggleWeatherLayer(type) {
 
 async function loadGoogleMaps() {
     try {
-        const response = await fetch('/api/config');
+        const response = await fetch('/api/googlemaps');
         const config = await response.json();
 
         if (!config.googleMapsApiKey) {
