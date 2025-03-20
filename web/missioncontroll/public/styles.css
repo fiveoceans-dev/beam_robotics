@@ -1,0 +1,161 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Gowun Dodum", serif;
+    font-size: 14px;
+    color: #000;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+p {
+    margin: 0;
+}
+img {
+    max-width: 100%;
+}
+
+.header-container {
+    width: 100%;
+    max-width: 950px;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.header-container p {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.links-section a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 8px;
+}
+
+.links-section a:hover {
+    color: #007BFF;
+}
+
+/* Three-column layout */
+.content-horizontal {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    flex-grow: 1;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.content-vertical {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+    max-width: 950px;
+    padding: 5;
+    flex-grow: 1;
+    gap: 10px;
+}
+
+/* Left Column */
+.left-column,
+.right-column {
+    width: 120px;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.column-title {
+    font-weight: bold;
+    margin: 0;
+}
+
+.left-column button {
+    width: 120px;
+    margin: 5px 0;
+    padding: 5px;
+    border: none;
+    background-color: #dddddd;
+    color: black;
+    cursor: pointer;
+}
+
+.left-column button:hover {
+    background-color: #007BFF;
+}
+
+/* Center Column */
+.center-column {
+    flex-grow: 1;
+    max-width: 950px;
+    padding: 5px;
+    text-align: center;
+}
+
+/* Right Column */
+.right-column img {
+    display: block;
+    margin: 5px auto;
+}
+
+/* Map */
+#map {
+    height: 50vh;
+    max-height: 420px;
+    width: 100%;
+    max-width: 950px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Camera Streams */
+.general-area {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.general-area img {
+    width: 300px;
+    height: 300px;
+}
+
+.general-section{
+    width: 950px;
+    padding: 5px;
+    text-align: center;
+}
+
+.general-item {
+    width: 33%;
+    text-align: center;
+    margin: 5px;
+}
+
+/* Footer */
+.footer {
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    margin-top: auto;
+    background: #f5f5f5;
+}

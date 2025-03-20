@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mission Control</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+    <script src="scripts.js"></script>
+    <script src="websocket.js"></script>
+    
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header-container">
+        <p>MISSION CONTROL</p>
+        <div class="links-section">
+            <a href="/">HOME</a>
+            <a href="#live-feed">LIVE FEED</a>
+            <a href="#data">DATA</a>
+            <a href="#training">TRAINING</a>
+            <a href="#perception">PERCEPTION</a>
+            <a href="#task">ROS2</a>
+            <a href="#task">AUTONOMY</a>
+            <a href="https://github.com/fiveoceans-dev/beam_robotics">GITHUB</a>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content-horizontal" id="home">
+        <!-- Left Column -->
+        <div class="left-column">
+            <div class="column-title">
+                WEATHER
+            </div>
+            <div id="controls">
+                <button onclick="toggleWeatherLayer('temp_new')">Temperature</button>
+                <button onclick="toggleWeatherLayer('precipitation_new')">Precipitation</button>
+                <button onclick="toggleWeatherLayer('wind_new')">Wind</button>
+                <button onclick="toggleWeatherLayer('clouds_new')">Cloud Cover</button>
+            </div>
+        </div>
+
+        <!-- Center Column -->
+        <div class="center-column">
+            <div id="map" name="map">
+                <img data-camera="Map" src="https://placehold.co/750x420.png" width="750" height="420">
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <div id="dashboard">
+                <div class="column-title">
+                    GPS
+                </div>
+                <img data-camera="GPS" src="https://placehold.co/120x120.png">
+                <img data-camera="Compass" src="https://placehold.co/120x120.png">
+                <img data-camera="Altitude" src="https://placehold.co/120x120.png">
+            </div>
+        </div>
+    </div>
+
+    <div class="content-vertical">
+        <div class="general-section" id="live-feed">
+            <div class="column-title">
+                LIVE FEED <a href="/public/files/unity-sim.zip">download unity sim</a>
+            </div>
+            <p>(controll the boat, press w, a, s, d to move)</p>
+            <div class="general-area">
+                <img class="general-item" data-camera="Camera_1" src="https://placehold.co/300x300.png">
+                <img class="general-item" data-camera="Camera_2" src="https://placehold.co/300x300.png">
+                <img class="general-item" data-camera="Camera_3" src="https://placehold.co/300x300.png">
+            </div>
+        </div>
+        <div class="general-section" id="data">
+            <div class="column-title">
+                DATA
+            </div>
+            <p>(generate simulation data)</p>
+            <div class="general-area">
+                a button to save png images from simulation and a gallery of images
+            </div>
+        </div>
+        <div class="general-section" id="training">
+            <div class="column-title">
+                TRAINING
+            </div>
+            <p>(train your perception model here)</p>
+            <div class="general-area">
+                <img class="general-item" data-camera="" src="https://placehold.co/300x300.png">
+                <img class="general-item" data-camera="" src="https://placehold.co/300x300.png">
+                <img class="general-item" data-camera="" src="https://placehold.co/300x300.png">
+            </div>
+        </div>
+        <div class="general-section" id="perception">
+            <div class="column-title">
+                PERCEPTION
+            </div>
+            <p>(perception model output)</p>
+            <div class="general-area">
+                <img class="general-item" data-camera="Perception_1" src="https://placehold.co/300x300.png">
+                <img class="general-item" data-camera="Perception_2" src="https://placehold.co/300x300.png">
+                <img class="general-item" data-camera="Perception_3" src="https://placehold.co/300x300.png">
+            </div>
+        </div>
+        <div class="general-section" id="ros">
+            <div class="column-title">
+                ROS2
+            </div>
+            <p>(connect your boat to ROS2)</p>
+            <div class="general-area">
+                ROS2
+            </div>
+        </div>    
+        <div class="general-section" id="autonomy">
+            <div class="column-title">
+                AUTONOMY
+            </div>
+            <p>(define a task for your autonomous boat)</p>
+            <div class="general-area">
+                NLP
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2025 Mission Control</p>
+    </div>
+
+</body>
+</html>
