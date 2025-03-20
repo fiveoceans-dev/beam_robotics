@@ -1,3 +1,5 @@
+templates/unity/water/*
+
 # Logs
 logs
 *.log
