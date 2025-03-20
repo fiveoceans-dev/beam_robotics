@@ -1,7 +1,7 @@
 // websocket.js
 
 let socket;
-const WS_URL = "ws://localhost:3009";
+const WS_URL = "ws://localhost:3000";
 let activeKeys = new Set(); // Track pressed keys
 let sendInterval = null; // Interval for sending commands
 let imageCache = {}; // Cache last received images to avoid excessive reloading
