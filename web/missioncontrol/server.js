@@ -5,14 +5,15 @@ const express = require("express");
 const path = require("path");
 const http = require("http");
 const WebSocket = require("ws");
-
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 app.use(express.static(path.join(__dirname, "public")));
 
+// API routes for keys
 app.get("/api/config", (req, res) => {
   res.json({ googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY });
 });
@@ -32,64 +33,60 @@ app.get("/api/weather-layer", (req, res) => {
   res.json({ url: weatherLayerUrl });
 });
 
-// WebSocket connection
+// WebSocket connection handling
 wss.on("connection", (ws) => {
-    console.log("Client connected");
-  
-    ws.on("message", (message) => {
-      if (message instanceof Buffer) {
-        // Forward image data to other clients
+  console.log("Client connected");
+
+  ws.on("message", (message) => {
+    if (message instanceof Buffer) {
+      wss.clients.forEach((client) => {
+        if (client !== ws && client.readyState === WebSocket.OPEN) {
+          client.send(message);
+        }
+      });
+    } else {
+      const msgString = message.toString();
+      if (msgString.startsWith("CONTROL|")) {
+        const commands = msgString.replace("CONTROL|", "").split("+");
+
+        let force = 0;
+        let turn = 0;
+
+        commands.forEach((command) => {
+          switch (command) {
+            case "FORWARD":
+              force = 1;
+              break;
+            case "BACKWARD":
+              force = -1;
+              break;
+            case "LEFT":
+              turn = -1;
+              break;
+            case "RIGHT":
+              turn = 1;
+              break;
+            default:
+              console.log("Unknown command:", command);
+          }
+        });
+
+        const controlMessage = `${force},${turn}`;
         wss.clients.forEach((client) => {
-          if (client !== ws && client.readyState === WebSocket.OPEN) {
-            client.send(message);
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(controlMessage);
           }
         });
       } else {
-        // Handle control commands
-        let msgString = message.toString();
-        if (msgString.startsWith("CONTROL|")) {
-          let commands = msgString.replace("CONTROL|", "").split("+");
-          console.log("Control commands received:", commands);
-  
-          let force = 0;
-          let turn = 0;
-  
-          commands.forEach((command) => {
-            switch (command) {
-              case "FORWARD":
-                force = 1;
-                break;
-              case "BACKWARD":
-                force = -1;
-                break;
-              case "LEFT":
-                turn = -1;
-                break;
-              case "RIGHT":
-                turn = 1;
-                break;
-              default:
-                console.log("Unknown command:", command);
-            }
-          });
-  
-          // Send force and turn values in the format "force,turn"
-          let controlMessage = `${force},${turn}`;
-          wss.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN) {
-              client.send(controlMessage);
-            }
-          });
-        } else {
-          console.log("Received unknown data, ignoring...");
-        }
+        console.log("Received unknown data, ignoring...");
       }
-    });
-  
-    ws.on("close", () => console.log("Client disconnected"));
+    }
   });
 
-// Start HTTP + WebSocket server
+  ws.on("close", () => console.log("Client disconnected"));
+});
+
+// Start HTTP and WebSocket server
 server.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
