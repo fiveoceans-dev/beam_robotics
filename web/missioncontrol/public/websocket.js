@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isConnected = false;
 
     toggleBtn.addEventListener("click", () => {
-        const url = websocketInput.value.trim() || "ws://localhost:3000";
+        const url = websocketInput.value.trim() || "ws://localhost:3005";
 
         if (!isConnected) {
             connectWebSocket(url);

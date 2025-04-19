@@ -1,4 +1,4 @@
-// script.js
+// scripts.js
 
 let map;
 let currentWeatherLayer = null;

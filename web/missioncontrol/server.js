@@ -7,7 +7,7 @@ const http = require("http");
 const WebSocket = require("ws");
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3005;
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
@@ -76,6 +76,7 @@ wss.on("connection", (ws) => {
 
   ws.on("close", () => console.log("Client disconnected"));
 });
+
 
 // Start HTTP and WebSocket server
 server.listen(PORT, () => {

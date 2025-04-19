@@ -21,8 +21,55 @@ body {
 p {
     margin: 0;
 }
+
 img {
     max-width: 100%;
+}
+
+
+/* Header */
+.logo img {
+    width: 100px;
+    margin-bottom: -25px;
+}
+
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    z-index: 1000;
+}
+
+.header-column {
+    flex: 1;
+    text-align: center;
+    padding: 0 10px;
+}
+
+.header-column.left {
+    text-align: left;
+}
+
+.header-column.right {
+    text-align: right;
+}
+
+.header-section img {
+    max-width: 100%;
+    height: auto;
+}
+
+.info-item {
+    width: 33%;
+    text-align: center;
+    margin: 5px;
+}
+
+.links-section {
+    text-align: center;
+    margin-bottom: 10px;
+    z-index: 1000;
 }
 
 .header-container {
@@ -49,6 +96,32 @@ img {
 
 .links-section a:hover {
     color: #007BFF;
+}
+
+
+/* Each landing container fills the viewport and centers content */
+.landing-container {
+    scroll-snap-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+
+}
+
+.landing-card {
+    font-family: 'Metal Mania', cursive, sans-serif;
+    width: 90%;
+    max-width: 600px;
+    border: 2px solid #fff;
+    border-radius: 8px;
+    margin: 25px auto;
+    padding: 2rem;
 }
 
 /* Three-column layout */
@@ -138,7 +211,7 @@ img {
     height: 300px;
 }
 
-.general-section{
+.general-section {
     width: 950px;
     padding: 5px;
     text-align: center;
@@ -150,7 +223,8 @@ img {
     margin: 5px;
 }
 
-.dot-idle, .dot-active {
+.dot-idle,
+.dot-active {
     display: inline-block;
     width: 10px;
     height: 10px;
@@ -164,6 +238,24 @@ img {
 
 .dot-active {
     background-color: green;
+}
+
+/* Background Video */
+#bgVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+#bgVideo.hidden {
+    opacity: 0;
 }
 
 /* Footer */
